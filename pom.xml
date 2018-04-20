@@ -1,0 +1,119 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.hotels</groupId>
+    <artifactId>hotels-oss-parent</artifactId>
+    <version>2.0.6</version>
+  </parent>
+
+  <artifactId>hcommon-ssh</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>SSH Tunneling Library</name>
+  <inceptionYear>2018</inceptionYear>
+
+  <properties>
+    <jsch.version>0.1.54</jsch.version>
+    <jsch-extension.version>0.1.6</jsch-extension.version>
+    <validation-api.version>1.1.0.Final</validation-api.version>
+    <slf4j.version>1.7.5</slf4j.version>
+    <junit.version>4.12</junit.version>
+    <mockito.version>1.10.19</mockito.version>
+    <hamcrest.version>1.3</hamcrest.version>
+    <maven-shade-plugin.version>3.0.0</maven-shade-plugin.version>
+    <relocation-prefix>com.hotels.hcommon.ssh</relocation-prefix>
+  </properties>
+
+  <dependencies>
+
+    <!-- JSch -->
+    <dependency>
+      <groupId>com.jcraft</groupId>
+      <artifactId>jsch</artifactId>
+      <version>${jsch.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.pastdev</groupId>
+      <artifactId>jsch-extension</artifactId>
+      <version>${jsch-extension.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>${validation-api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Test -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-library</artifactId>
+      <version>${hamcrest.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>${maven-shade-plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <createDependencyReducedPom>false</createDependencyReducedPom>
+          <artifactSet>
+            <includes>
+              <include>com.jcraft:*</include>
+              <include>com.pastdev:*</include>
+            </includes>
+          </artifactSet>
+          <relocations>
+            <relocation>
+              <pattern>com.jcraft</pattern>
+              <shadedPattern>${relocation-prefix}.com.jcraft</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>com.pastdev</pattern>
+              <shadedPattern>${relocation-prefix}.com.pastdev</shadedPattern>
+            </relocation>
+          </relocations>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

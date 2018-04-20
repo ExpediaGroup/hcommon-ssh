@@ -1,0 +1,41 @@
+# Eclipse files
+.classpath
+.settings
+.project
+.springBeans
+
+# Checkstyle, findbugs and other eclipse plugins
+*/.checkstyle
+*/.fbExcludeFilterFile
+*/.factorypath
+*/.apt_generated/
+
+# Jenv configuration
+.java-version
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Netbeans files
+nbactions.xml
+
+# VS code
+.vscode/
+
+# Maven target folder
+target/
+
+# Any left over .svn folders
+.svn/
+
+# MAC stuff
+.DS_Store
+
+# AWS credentials
+*.pem
+
+# Ignore GPG files
+**/*.gpg
+**/*.key

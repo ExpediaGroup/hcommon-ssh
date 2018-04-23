@@ -18,8 +18,8 @@ package com.hotels.hcommon.ssh;
 import java.lang.reflect.Method;
 
 /**
- * Implementations of this interface will check which method invocations must ensure the SSH
- * tunnels is open and which method invocations must close the SSH tunnel.
+ * Implementations of this interface will check which method invocations must ensure the SSH tunnels is open and which
+ * method invocations must close the SSH tunnel.
  */
 public interface MethodChecker {
 
@@ -27,7 +27,9 @@ public interface MethodChecker {
 
     @Override
     public boolean isTunnelled(Method method) {
-      return "connect".equals(method.getName()) || "open".equals(method.getName());
+      return "connect".equals(method.getName())
+          || "reconnect".equals(method.getName())
+          || "open".equals(method.getName());
     }
 
     @Override
@@ -43,16 +45,17 @@ public interface MethodChecker {
    * Checks if the method requires the SSH tunnel to be open.
    * <p>
    * If the method returns <code>true</code> it will ensure the SSH tunnel is open before the actual method is invoked.
-   * This may result being an expensive operation so its advised only us this during the connect and reconnect
-   * phases.
+   * This may result being an expensive operation so its advised only us this during the connect and reconnect phases.
    * </p>
+   * 
    * @param method Object method to check.
    * @return <code>true</code> if the SSH tunnel is required by the invocation, <code>false</code> otherwise.
    */
   boolean isTunnelled(Method method);
 
   /**
-   * Checks if the method is shutting down the tunnel connection in some way and thus requires the SSH tunnel to be closed.
+   * Checks if the method is shutting down the tunnel connection in some way and thus requires the SSH tunnel to be
+   * closed.
    *
    * @param method Object method to check.
    * @return <code>true</code> if the SSH tunnel must be closed after the invocation, <code>false</code> otherwise.

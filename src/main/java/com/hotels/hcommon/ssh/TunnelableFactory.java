@@ -74,13 +74,17 @@ public class TunnelableFactory<T extends Tunnelable> {
     this.tunnelConnectionManagerFactory = tunnelConnectionManagerFactory;
   }
 
-  public Tunnelable wrap(T delegate, MethodChecker methodChecker, String remoteHost, int remotePort) {
+  public Tunnelable wrap(
+      TunnelableSupplier<T> delegateSupplier,
+      MethodChecker methodChecker,
+      String remoteHost,
+      int remotePort) {
     TunnelConnectionManager tunnelConnectionManager = tunnelConnectionManagerFactory.create(remoteHost, remotePort);
-    return wrap(delegate, methodChecker, tunnelConnectionManager, remoteHost, remotePort);
+    return wrap(delegateSupplier, methodChecker, tunnelConnectionManager, remoteHost, remotePort);
   }
 
   public Tunnelable wrap(
-      T delegate,
+      TunnelableSupplier<T> delegateSupplier,
       MethodChecker methodChecker,
       String localHost,
       int localPort,
@@ -88,16 +92,17 @@ public class TunnelableFactory<T extends Tunnelable> {
       int remotePort) {
     TunnelConnectionManager tunnelConnectionManager = tunnelConnectionManagerFactory.create(localHost, localPort,
         remoteHost, remotePort);
-    return wrap(delegate, methodChecker, tunnelConnectionManager, remoteHost, remotePort);
+    return wrap(delegateSupplier, methodChecker, tunnelConnectionManager, remoteHost, remotePort);
   }
 
   private Tunnelable wrap(
-      T delegate,
+      TunnelableSupplier<T> delegateSupplier,
       MethodChecker methodChecker,
       TunnelConnectionManager tunnelConnectionManager,
       String remoteHost,
       int remotePort) {
     openTunnel(remoteHost, remotePort, tunnelConnectionManager);
+    T delegate = delegateSupplier.get();
     TunnelingConnectableInvocationHandler<T> tunneledHandler = new TunnelingConnectableInvocationHandler<>(
         tunnelConnectionManager, delegate, methodChecker);
 

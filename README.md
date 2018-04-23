@@ -23,7 +23,11 @@ Example:
       ...
     }
     ...
-    MyClient myClient = new MyClient();
+    public class MyClientSupplier implements TunnelableSupplier<MyClient> {
+      ...
+    }
+    ...
+    MyClientSupplier myClientSupplier = new MyClientSupplier();
     ...
     SshSettings sshSettings = SshSettings
       .builder()
@@ -32,7 +36,7 @@ Example:
       .withPrivateKeys("/home/user/.ssh/id_rsa_common")
       .build();
     TunnelableFactory factory = new TunnelableFactory(sshSettings);
-    Tunnelable wrapped = factory.wrap(myClient, MethodCheck.DEFAULT, "my-remote-service", 8080);
+    Tunnelable wrapped = factory.wrap(myClientSupplier, MethodCheck.DEFAULT, "my-remote-service", 8080);
 
 ### SSH tunnel syntax
 

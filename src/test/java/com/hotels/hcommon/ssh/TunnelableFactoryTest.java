@@ -56,6 +56,7 @@ public class TunnelableFactoryTest {
   private @Mock Tunnel tunnel;
   private @Mock TunnelConnectionManagerFactory tunnelConnectionManagerFactory;
   private @Mock MethodChecker methodChecker;
+  private @Mock TunnelableSupplier<Tunnelled> tunnelableSupplier;
 
   private TunnelableFactory<Tunnelled> tunnelableFactory;
   private final Tunnelled tunnelled = new Tunnelled();
@@ -66,19 +67,21 @@ public class TunnelableFactoryTest {
     when(tunnelConnectionManager.getTunnel(anyString(), anyInt())).thenReturn(tunnel);
     when(tunnelConnectionManagerFactory.create(REMOTE_HOST, REMOTE_PORT)).thenReturn(tunnelConnectionManager);
     when(tunnelConnectionManagerFactory.getSshSettings()).thenReturn(sshSettings);
+    when(tunnelableSupplier.get()).thenReturn(tunnelled);
     tunnelableFactory = new TunnelableFactory<>(tunnelConnectionManagerFactory);
   }
 
   @Test
   public void openTunnelUponCreation() throws Exception {
-    tunnelableFactory.wrap(tunnelled, methodChecker, REMOTE_HOST, REMOTE_PORT);
+    tunnelableFactory.wrap(tunnelableSupplier, methodChecker, REMOTE_HOST, REMOTE_PORT);
     verify(tunnelConnectionManager).open();
   }
 
   @Test
   public void ensureTunnelIsOpen() throws Exception {
     when(methodChecker.isTunnelled(any(Method.class))).thenReturn(true);
-    Connectable proxy = (Connectable) tunnelableFactory.wrap(tunnelled, methodChecker, REMOTE_HOST, REMOTE_PORT);
+    Connectable proxy = (Connectable) tunnelableFactory.wrap(tunnelableSupplier, methodChecker, REMOTE_HOST,
+        REMOTE_PORT);
     proxy.method();
     verify(tunnelConnectionManager).ensureOpen();
     verify(tunnelConnectionManager, never()).close();
@@ -87,7 +90,8 @@ public class TunnelableFactoryTest {
   @Test
   public void closeTunnel() throws Exception {
     when(methodChecker.isShutdown(any(Method.class))).thenReturn(true);
-    Connectable proxy = (Connectable) tunnelableFactory.wrap(tunnelled, methodChecker, REMOTE_HOST, REMOTE_PORT);
+    Connectable proxy = (Connectable) tunnelableFactory.wrap(tunnelableSupplier, methodChecker, REMOTE_HOST,
+        REMOTE_PORT);
     proxy.method();
     verify(tunnelConnectionManager, never()).ensureOpen();
     verify(tunnelConnectionManager).close();
@@ -95,7 +99,8 @@ public class TunnelableFactoryTest {
 
   @Test
   public void noTunnelConnectivityInteractions() throws Exception {
-    Connectable proxy = (Connectable) tunnelableFactory.wrap(tunnelled, methodChecker, REMOTE_HOST, REMOTE_PORT);
+    Connectable proxy = (Connectable) tunnelableFactory.wrap(tunnelableSupplier, methodChecker, REMOTE_HOST,
+        REMOTE_PORT);
     proxy.method();
     verify(tunnelConnectionManager, never()).ensureOpen();
     verify(tunnelConnectionManager, never()).close();

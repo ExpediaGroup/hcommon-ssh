@@ -30,9 +30,6 @@ import com.jcraft.jsch.KeyPair;
 import com.pastdev.jsch.SessionFactory;
 
 import com.hotels.hcommon.ssh.SshSettings;
-import com.hotels.hcommon.ssh.session.DefaultSessionFactorySupplier;
-import com.hotels.hcommon.ssh.session.DelegatingSessionFactory;
-import com.hotels.hcommon.ssh.session.SessionFactorySupplier;
 
 public class DefaultSessionFactorySupplierTest {
 
@@ -92,22 +89,5 @@ public class DefaultSessionFactorySupplierTest {
     SessionFactory sessionFactoryB = sessionFactorySupplier.get();
     assertThat(sessionFactoryA, is(sessionFactoryB));
   }
-  //
-  // @Test
-  // public void invalidKnownHosts() {
-  // new SessionFactorySupplier(SSH_PORT, "hosts",
-  // ImmutableList.of(identityKey1.getAbsolutePath(), identityKey2.getAbsolutePath()), SSH_TIMEOUT).get();
-  // }
-  //
-  // @Test(expected = SshException.class)
-  // public void invalidIdentityKey() {
-  // new SessionFactorySupplier(SSH_PORT, knownHosts.getAbsolutePath(), ImmutableList.of("K1"), SSH_TIMEOUT).get();
-  // }
-  //
-  // @Test(expected = IllegalArgumentException.class)
-  // public void invalidTimeout() {
-  // new SessionFactorySupplier(SSH_PORT, knownHosts.getAbsolutePath(),
-  // ImmutableList.of(identityKey1.getAbsolutePath(), identityKey2.getAbsolutePath()), -1).get();
-  // }
 
 }

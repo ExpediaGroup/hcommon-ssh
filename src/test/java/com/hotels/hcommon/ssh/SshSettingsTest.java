@@ -16,6 +16,7 @@
 package com.hotels.hcommon.ssh;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
@@ -30,15 +31,13 @@ import org.junit.rules.TemporaryFolder;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.KeyPair;
 
-import com.hotels.hcommon.ssh.SshSettings;
-
 public class SshSettingsTest {
 
   private static final String KNOWN_HOSTS = "knownHosts";
   private static final String IDENTITY_KEY_1 = "K1";
   private static final String IDENTITY_KEY_2 = "K2";
 
-  public @Rule ExpectedException expectedEx = ExpectedException.none();
+  public @Rule ExpectedException expectedException = ExpectedException.none();
   public @Rule TemporaryFolder tmpFolder = new TemporaryFolder();
 
   private File knownHosts;
@@ -99,8 +98,8 @@ public class SshSettingsTest {
   }
 
   public void invalidSshPort() {
-    expectedEx.expect(IllegalArgumentException.class);
-    expectedEx.expectMessage("Invalid SSH port number: 0");
+    expectedException.expect(IllegalArgumentException.class);
+    expectedException.expectMessage("Invalid SSH port number: 0");
     SshSettings
         .builder()
         .withSshPort(0)
@@ -112,8 +111,8 @@ public class SshSettingsTest {
 
   @Test
   public void invalidSessionTimeout() {
-    expectedEx.expect(IllegalArgumentException.class);
-    expectedEx.expectMessage("Invalid SSH session timeout: -1");
+    expectedException.expect(IllegalArgumentException.class);
+    expectedException.expectMessage("Invalid SSH session timeout: -1");
     SshSettings
         .builder()
         .withSessionTimeout(-1)
@@ -124,9 +123,31 @@ public class SshSettingsTest {
   }
 
   @Test
+  public void nullRoute() {
+    SshSettings sshSettings = SshSettings
+        .builder()
+        .withRoute(null)
+        .withKnownHosts(knownHosts.getAbsolutePath())
+        .withPrivateKeys(identityKey1.getAbsolutePath() + "," + identityKey2.getAbsolutePath())
+        .build();
+    assertThat(sshSettings.getRoute(), is(nullValue()));
+  }
+
+  @Test
+  public void emptyRoute() {
+    SshSettings sshSettings = SshSettings
+        .builder()
+        .withRoute(" ")
+        .withKnownHosts(knownHosts.getAbsolutePath())
+        .withPrivateKeys(identityKey1.getAbsolutePath() + "," + identityKey2.getAbsolutePath())
+        .build();
+    assertThat(sshSettings.getRoute(), is(" "));
+  }
+
+  @Test
   public void invalidRoute() {
-    expectedEx.expect(IllegalArgumentException.class);
-    expectedEx.expectMessage("Invalid SSH tunnel route: '@ -> 1'");
+    expectedException.expect(IllegalArgumentException.class);
+    expectedException.expectMessage("Invalid SSH tunnel route: '@ -> 1'");
     SshSettings
         .builder()
         .withRoute("@ -> 1")
@@ -136,21 +157,31 @@ public class SshSettingsTest {
   }
 
   @Test
-  public void invalidKnownHosts() {
-    expectedEx.expect(IllegalArgumentException.class);
-    expectedEx.expectMessage("Invalid SSH known hosts: ' '");
-    SshSettings
+  public void nullKnownHosts() {
+    SshSettings sshSettings = SshSettings
+        .builder()
+        .withRoute("h1 -> h2")
+        .withKnownHosts(null)
+        .withPrivateKeys(identityKey1.getAbsolutePath() + "," + identityKey2.getAbsolutePath())
+        .build();
+    assertThat(sshSettings.getKnownHosts(), is(nullValue()));
+  }
+
+  @Test
+  public void emptyKnownHosts() {
+    SshSettings sshSettings = SshSettings
         .builder()
         .withRoute("h1 -> h2")
         .withKnownHosts(" ")
         .withPrivateKeys(identityKey1.getAbsolutePath() + "," + identityKey2.getAbsolutePath())
         .build();
+    assertThat(sshSettings.getKnownHosts(), is(" "));
   }
 
   @Test
   public void invalidPrivateKeys() {
-    expectedEx.expect(IllegalArgumentException.class);
-    expectedEx.expectMessage("Invalid SSH private keys: ' '");
+    expectedException.expect(IllegalArgumentException.class);
+    expectedException.expectMessage("Invalid SSH private keys: ' '");
     SshSettings
         .builder()
         .withRoute("h1 -> h2")

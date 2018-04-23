@@ -28,7 +28,6 @@ import javax.validation.constraints.NotNull;
 import com.hotels.hcommon.ssh.validation.constraint.TunnelRoute;
 import com.hotels.hcommon.ssh.validation.validator.TunnelRouteValidator;
 
-// TODO choose between validation annotation and preconditions
 public class SshSettings {
 
   public static final int DEFAULT_SSH_PORT = 22;
@@ -60,7 +59,7 @@ public class SshSettings {
       return this;
     }
 
-    public Builder withKnownHosts(@NotNull String knownHosts) {
+    public Builder withKnownHosts(String knownHosts) {
       this.knownHosts = knownHosts;
       return this;
     }
@@ -80,8 +79,6 @@ public class SshSettings {
       checkArgument(new TunnelRouteValidator().isValid(route, null), "Invalid SSH tunnel route: '" + route + "'");
       checkArgument(privateKeys != null && !privateKeys.trim().isEmpty(),
           "Invalid SSH private keys: '" + privateKeys + "'");
-      checkArgument(knownHosts != null && !knownHosts.trim().isEmpty(),
-          "Invalid SSH known hosts: '" + knownHosts + "'");
       checkArgument(sessionTimeout >= 0, "Invalid SSH session timeout: " + sessionTimeout);
       return new SshSettings(this);
     }

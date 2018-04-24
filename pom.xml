@@ -12,6 +12,13 @@
   <name>SSH Tunneling Library</name>
   <inceptionYear>2018</inceptionYear>
 
+  <scm>
+    <connection>scm:git:git@github.com:HotelsDotCom/hcommon-ssh.git</connection>
+    <developerConnection>scm:git:git@github.com:HotelsDotCom/hcommon-ssh.git</developerConnection>
+    <url>https://github.com/HotelsDotCom/hcommon-ssh</url>
+    <tag>HEAD</tag>
+  </scm>
+
   <properties>
     <jsch.version>0.1.54</jsch.version>
     <jsch-extension.version>0.1.6</jsch-extension.version>

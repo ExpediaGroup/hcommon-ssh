@@ -26,8 +26,10 @@ import com.pastdev.jsch.SessionFactory;
 class DelegatingSessionFactory implements SessionFactory {
   private static final Logger log = LoggerFactory.getLogger(DelegatingSessionFactory.class);
 
-  final /* VisibleForTesting */ SessionFactory delegate;
-  final /* VisibleForTesting */ int sshTimeout;
+  /* VisibleForTesting */
+  final SessionFactory delegate;
+  /* VisibleForTesting */
+  final int sshTimeout;
 
   DelegatingSessionFactory(SessionFactory delegate, int sshTimeout) {
     this.delegate = delegate;

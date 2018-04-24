@@ -22,7 +22,8 @@ import com.pastdev.jsch.SessionFactory;
 import com.pastdev.jsch.SessionFactory.SessionFactoryBuilder;
 
 class DelegatingSessionFactoryBuilder extends SessionFactoryBuilder {
-  final /* VisibleForTesting */ SessionFactoryBuilder delegate;
+  /* VisibleForTesting */
+  final SessionFactoryBuilder delegate;
   private final int sshTimeout;
 
   DelegatingSessionFactoryBuilder(SessionFactoryBuilder delegate, int sshTimeout) {

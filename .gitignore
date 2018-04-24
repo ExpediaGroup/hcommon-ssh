@@ -24,8 +24,9 @@ nbactions.xml
 # VS code
 .vscode/
 
-# Maven target folder
+# Maven stuff
 target/
+dependency-reduced-pom.xml
 
 # Any left over .svn folders
 .svn/

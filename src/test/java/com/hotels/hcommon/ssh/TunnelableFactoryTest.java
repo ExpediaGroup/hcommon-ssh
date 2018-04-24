@@ -39,6 +39,8 @@ import com.hotels.hcommon.ssh.tunnel.TunnelConnectionManagerFactory;
 public class TunnelableFactoryTest {
 
   private static final int SSH_PORT = 22;
+  private static final int LOCAL_PORT = 10240;
+  private static final String LOCAL_HOST = "local";
   private static final int REMOTE_PORT = 1024;
   private static final String REMOTE_HOST = "remote";
 
@@ -65,7 +67,8 @@ public class TunnelableFactoryTest {
   public void init() {
     when(tunnel.getAssignedLocalPort()).thenReturn(SSH_PORT);
     when(tunnelConnectionManager.getTunnel(anyString(), anyInt())).thenReturn(tunnel);
-    when(tunnelConnectionManagerFactory.create(REMOTE_HOST, REMOTE_PORT)).thenReturn(tunnelConnectionManager);
+    when(tunnelConnectionManagerFactory.create(LOCAL_HOST, LOCAL_PORT, REMOTE_HOST, REMOTE_PORT))
+        .thenReturn(tunnelConnectionManager);
     when(tunnelConnectionManagerFactory.getSshSettings()).thenReturn(sshSettings);
     when(tunnelableSupplier.get()).thenReturn(tunnelled);
     tunnelableFactory = new TunnelableFactory<>(tunnelConnectionManagerFactory);
@@ -73,15 +76,15 @@ public class TunnelableFactoryTest {
 
   @Test
   public void openTunnelUponCreation() throws Exception {
-    tunnelableFactory.wrap(tunnelableSupplier, methodChecker, REMOTE_HOST, REMOTE_PORT);
+    tunnelableFactory.wrap(tunnelableSupplier, methodChecker, LOCAL_HOST, LOCAL_PORT, REMOTE_HOST, REMOTE_PORT);
     verify(tunnelConnectionManager).open();
   }
 
   @Test
   public void ensureTunnelIsOpen() throws Exception {
     when(methodChecker.isTunnelled(any(Method.class))).thenReturn(true);
-    Connectable proxy = (Connectable) tunnelableFactory.wrap(tunnelableSupplier, methodChecker, REMOTE_HOST,
-        REMOTE_PORT);
+    Connectable proxy = (Connectable) tunnelableFactory.wrap(tunnelableSupplier, methodChecker, LOCAL_HOST, LOCAL_PORT,
+        REMOTE_HOST, REMOTE_PORT);
     proxy.method();
     verify(tunnelConnectionManager).ensureOpen();
     verify(tunnelConnectionManager, never()).close();
@@ -90,8 +93,8 @@ public class TunnelableFactoryTest {
   @Test
   public void closeTunnel() throws Exception {
     when(methodChecker.isShutdown(any(Method.class))).thenReturn(true);
-    Connectable proxy = (Connectable) tunnelableFactory.wrap(tunnelableSupplier, methodChecker, REMOTE_HOST,
-        REMOTE_PORT);
+    Connectable proxy = (Connectable) tunnelableFactory.wrap(tunnelableSupplier, methodChecker, LOCAL_HOST, LOCAL_PORT,
+        REMOTE_HOST, REMOTE_PORT);
     proxy.method();
     verify(tunnelConnectionManager, never()).ensureOpen();
     verify(tunnelConnectionManager).close();
@@ -99,8 +102,8 @@ public class TunnelableFactoryTest {
 
   @Test
   public void noTunnelConnectivityInteractions() throws Exception {
-    Connectable proxy = (Connectable) tunnelableFactory.wrap(tunnelableSupplier, methodChecker, REMOTE_HOST,
-        REMOTE_PORT);
+    Connectable proxy = (Connectable) tunnelableFactory.wrap(tunnelableSupplier, methodChecker, LOCAL_HOST, LOCAL_PORT,
+        REMOTE_HOST, REMOTE_PORT);
     proxy.method();
     verify(tunnelConnectionManager, never()).ensureOpen();
     verify(tunnelConnectionManager, never()).close();

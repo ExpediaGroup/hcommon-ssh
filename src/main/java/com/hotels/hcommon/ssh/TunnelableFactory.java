@@ -77,15 +77,6 @@ public class TunnelableFactory<T extends Tunnelable> {
   public Tunnelable wrap(
       TunnelableSupplier<T> delegateSupplier,
       MethodChecker methodChecker,
-      String remoteHost,
-      int remotePort) {
-    TunnelConnectionManager tunnelConnectionManager = tunnelConnectionManagerFactory.create(remoteHost, remotePort);
-    return wrap(delegateSupplier, methodChecker, tunnelConnectionManager, remoteHost, remotePort);
-  }
-
-  public Tunnelable wrap(
-      TunnelableSupplier<T> delegateSupplier,
-      MethodChecker methodChecker,
       String localHost,
       int localPort,
       String remoteHost,
@@ -110,7 +101,7 @@ public class TunnelableFactory<T extends Tunnelable> {
         tunneledHandler);
   }
 
-  private void openTunnel(String remoteHost, int remotePort, TunnelConnectionManager tunnelConnectionManager) {
+  private int openTunnel(String remoteHost, int remotePort, TunnelConnectionManager tunnelConnectionManager) {
     SshSettings sshSettings = tunnelConnectionManagerFactory.getSshSettings();
     try {
       log.debug("Creating tunnel: {}:? -> {} -> {}:{}", LOCALHOST, sshSettings.getRoute(), remoteHost, remotePort);
@@ -118,6 +109,7 @@ public class TunnelableFactory<T extends Tunnelable> {
       tunnelConnectionManager.open();
       log.debug("Tunnel created: {}:{} -> {} -> {}:{}", LOCALHOST, localPort, sshSettings.getRoute(), remoteHost,
           remotePort);
+      return localPort;
     } catch (JSchException | RuntimeException e) {
       String message = String.format("Unable to establish SSH tunnel: '%s:?' -> '%s' -> '%s:%s'", LOCALHOST,
           sshSettings.getRoute(), remoteHost, remotePort);

@@ -15,6 +15,7 @@
  */
 package com.hotels.hcommon.ssh;
 
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
@@ -46,11 +47,22 @@ public class TunnelableFactoryTest {
 
   private static interface Connectable extends Tunnelable {
     public void method();
+
+    public void methodThrowingException() throws TunneledException;
   }
 
   private static class Tunnelled implements Connectable {
     @Override
     public void method() {}
+
+    @Override
+    public void methodThrowingException() throws TunneledException {
+      throw new TunneledException();
+    }
+  }
+
+  private static class TunneledException extends Exception {
+    private static final long serialVersionUID = 1L;
   }
 
   private @Mock SshSettings sshSettings;
@@ -91,6 +103,20 @@ public class TunnelableFactoryTest {
   }
 
   @Test
+  public void ensureTunnelIsOpenProxyThrowsException() throws Exception {
+    when(methodChecker.isTunnelled(any(Method.class))).thenReturn(true);
+    Connectable proxy = (Connectable) tunnelableFactory.wrap(tunnelableSupplier, methodChecker, LOCAL_HOST, LOCAL_PORT,
+        REMOTE_HOST, REMOTE_PORT);
+    try {
+      proxy.methodThrowingException();
+      fail("Should have thrown TunneledException");
+    } catch (TunneledException e) {
+      verify(tunnelConnectionManager).ensureOpen();
+      verify(tunnelConnectionManager, never()).close();
+    }
+  }
+
+  @Test
   public void closeTunnel() throws Exception {
     when(methodChecker.isShutdown(any(Method.class))).thenReturn(true);
     Connectable proxy = (Connectable) tunnelableFactory.wrap(tunnelableSupplier, methodChecker, LOCAL_HOST, LOCAL_PORT,
@@ -101,12 +127,33 @@ public class TunnelableFactoryTest {
   }
 
   @Test
+  public void closeTunnelThrowsException() throws Exception {
+    when(methodChecker.isShutdown(any(Method.class))).thenReturn(true);
+    Connectable proxy = (Connectable) tunnelableFactory.wrap(tunnelableSupplier, methodChecker, LOCAL_HOST, LOCAL_PORT,
+        REMOTE_HOST, REMOTE_PORT);
+    try {
+      proxy.methodThrowingException();
+      fail("Should have thrown TunneledException");
+    } catch (TunneledException e) {
+      verify(tunnelConnectionManager, never()).ensureOpen();
+      verify(tunnelConnectionManager).close();
+    }
+  }
+
+  @Test
   public void noTunnelConnectivityInteractions() throws Exception {
     Connectable proxy = (Connectable) tunnelableFactory.wrap(tunnelableSupplier, methodChecker, LOCAL_HOST, LOCAL_PORT,
         REMOTE_HOST, REMOTE_PORT);
     proxy.method();
     verify(tunnelConnectionManager, never()).ensureOpen();
     verify(tunnelConnectionManager, never()).close();
+  }
+
+  @Test(expected = TunneledException.class)
+  public void invokeThrowsUnderlyingTargetException() throws Throwable {
+    Connectable proxy = (Connectable) tunnelableFactory.wrap(tunnelableSupplier, methodChecker, LOCAL_HOST, LOCAL_PORT,
+        REMOTE_HOST, REMOTE_PORT);
+    proxy.methodThrowingException();
   }
 
 }

@@ -18,6 +18,7 @@ package com.hotels.hcommon.ssh;
 import static com.hotels.hcommon.ssh.tunnel.DefaultTunnelConnectionManagerFactory.LOCALHOST;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
@@ -52,14 +53,30 @@ public class TunnelableFactory<T extends Tunnelable> {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
       if (methodChecker.isTunnelled(method)) {
         tunnelConnectionManager.ensureOpen();
-        return method.invoke(delegate, args);
+        return invoke(method, args);
       }
       if (methodChecker.isShutdown(method)) {
-        Object result = method.invoke(delegate, args);
-        tunnelConnectionManager.close();
-        return result;
+        try {
+          Object result = invoke(method, args);
+          return result;
+        } finally {
+          tunnelConnectionManager.close();
+        }
       }
-      return method.invoke(delegate, args);
+      return invoke(method, args);
+    }
+
+    private Object invoke(Method method, Object[] args) throws Throwable {
+      try {
+        return method.invoke(delegate, args);
+      } catch (InvocationTargetException e) {
+        Throwable cause = e.getCause();
+        if (cause != null) {
+          throw cause;
+        } else {
+          throw e;
+        }
+      }
     }
   }
 

@@ -23,7 +23,6 @@ import java.util.List;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 import com.hotels.hcommon.ssh.validation.constraint.TunnelRoute;
 import com.hotels.hcommon.ssh.validation.validator.TunnelRouteValidator;
@@ -33,16 +32,19 @@ public class SshSettings {
   public static final int DEFAULT_SSH_PORT = 22;
   public static final int DEFAULT_SESSION_TIMEOUT = 0; // never time out
   public static final boolean DEFAULT_STRICT_HOST_KEY_CHECKING = true;
+  private static final String DEFAULT_LOCALHOST = "localhost";
 
   public static class Builder {
+
     private int sshPort = DEFAULT_SSH_PORT;
     private String route;
     private String privateKeys;
     private String knownHosts;
+    private String localHost = DEFAULT_LOCALHOST;
     private int sessionTimeout = DEFAULT_SESSION_TIMEOUT;
     private boolean strictHostKeyChecking = DEFAULT_STRICT_HOST_KEY_CHECKING;
 
-    private Builder() {}
+    public Builder() {}
 
     public Builder withSshPort(@Min(1) @Max(65535) int sshPort) {
       this.sshPort = sshPort;
@@ -54,13 +56,18 @@ public class SshSettings {
       return this;
     }
 
-    public Builder withPrivateKeys(@NotNull String privateKeys) {
+    public Builder withPrivateKeys(String privateKeys) {
       this.privateKeys = privateKeys;
       return this;
     }
 
     public Builder withKnownHosts(String knownHosts) {
       this.knownHosts = knownHosts;
+      return this;
+    }
+
+    public Builder withLocalHost(String localHost) {
+      this.localHost = localHost;
       return this;
     }
 
@@ -92,14 +99,16 @@ public class SshSettings {
   private final String route;
   private final List<String> privateKeys;
   private final String knownHosts;
+  private final String localhost;
   private final int sessionTimeout;
   private final boolean strictHostKeyChecking;
 
-  private SshSettings(Builder builder) {
+  protected SshSettings(Builder builder) {
     sshPort = builder.sshPort;
     route = builder.route;
     privateKeys = Collections.unmodifiableList(Arrays.asList(builder.privateKeys.split(",")));
     knownHosts = builder.knownHosts;
+    localhost = builder.localHost;
     sessionTimeout = builder.sessionTimeout;
     strictHostKeyChecking = builder.strictHostKeyChecking;
   }
@@ -118,6 +127,10 @@ public class SshSettings {
 
   public String getKnownHosts() {
     return knownHosts;
+  }
+
+  public String getLocalHost() {
+    return localhost;
   }
 
   public int getSessionTimeout() {

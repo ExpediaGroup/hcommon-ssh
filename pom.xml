@@ -31,6 +31,8 @@
     <relocation-prefix>com.hotels.hcommon.ssh</relocation-prefix>
     <guava.version>20.0</guava.version>
     <hivernate-validator.version>5.4.2.Final</hivernate-validator.version>
+    <javax-el.version>3.0.1-b08</javax-el.version>
+    <spring-webmvc.version>4.3.19.RELEASE</spring-webmvc.version>
   </properties>
 
   <dependencies>
@@ -64,7 +66,7 @@
     <dependency>
       <groupId>org.glassfish</groupId>
       <artifactId>javax.el</artifactId>
-      <version>3.0.1-b08</version>
+      <version>${javax-el.version}</version>
     </dependency>
     
     
@@ -72,7 +74,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
-      <version>4.3.19.RELEASE</version>
+      <version>${spring-webmvc.version}</version>
     </dependency>
    
     <dependency>

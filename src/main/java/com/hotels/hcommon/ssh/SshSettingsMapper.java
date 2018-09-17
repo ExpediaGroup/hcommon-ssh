@@ -35,7 +35,7 @@ public class SshSettingsMapper {
 
   @SuppressWarnings("deprecation")
   public @NotBlank @TunnelRoute String getRoute() {
-    return buildSettings().getRoute();
+    return builtSettings().getRoute();
   }
 
   public void setRoute(String route) {
@@ -43,7 +43,7 @@ public class SshSettingsMapper {
   }
 
   public @Min(1) @Max(65535) int getPort() {
-    return buildSettings().getSshPort();
+    return builtSettings().getSshPort();
   }
 
   public void setPort(int port) {
@@ -51,7 +51,7 @@ public class SshSettingsMapper {
   }
 
   public String getLocalHost() {
-    return buildSettings().getLocalHost();
+    return builtSettings().getLocalHost();
   }
 
   public void setLocalHost(String localHost) {
@@ -60,7 +60,7 @@ public class SshSettingsMapper {
 
   public @NotBlank String getPrivateKeys() {
 
-    return joiner.join(buildSettings().getPrivateKeys());
+    return joiner.join(builtSettings().getPrivateKeys());
 
   }
 
@@ -69,7 +69,7 @@ public class SshSettingsMapper {
   }
 
   public @NotBlank String getKnownHosts() {
-    return buildSettings().getKnownHosts();
+    return builtSettings().getKnownHosts();
   }
 
   public void setKnownHosts(String knownHosts) {
@@ -77,7 +77,7 @@ public class SshSettingsMapper {
   }
 
   public @Min(0) @Max(Integer.MAX_VALUE) int getTimeout() {
-    return buildSettings().getSessionTimeout();
+    return builtSettings().getSessionTimeout();
   }
 
   public void setTimeout(int timeout) {
@@ -90,7 +90,7 @@ public class SshSettingsMapper {
       return wrongStrictHostKeyChecking;
     }
 
-    if (buildSettings().isStrictHostKeyChecking()) {
+    if (builtSettings().isStrictHostKeyChecking()) {
       return "yes";
     } else {
       return "no";
@@ -108,7 +108,7 @@ public class SshSettingsMapper {
     }
   }
 
-  private SshSettings buildSettings() {
+  private SshSettings builtSettings() {
     return sshSettingsBuilder.buildWithoutCheck();
   }
 

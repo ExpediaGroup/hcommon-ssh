@@ -17,70 +17,80 @@ package com.hotels.hcommon.ssh;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.google.common.base.Joiner;
 
 import com.hotels.hcommon.ssh.SshSettings.Builder;
+import com.hotels.hcommon.ssh.validation.constraint.TunnelRoute;
 
-public class SshSettingsFactory {
+public class SshSettingsMapper {
 
   private final Joiner joiner = Joiner.on(',');
   private final Builder sshSettingsBuilder = SshSettings.builder();
+  private String wrongStrictHostKeyChecking;
+  private boolean strictHostKeyCheckingIsWrong = false;
 
-  public SshSettings newInstance() {
-    return sshSettingsBuilder.build();
-  }
-
-  public String getRoute() {
-    return sshSettingsBuilder.build().getRoute();
+  @SuppressWarnings("deprecation")
+  public @NotBlank @TunnelRoute String getRoute() {
+    return buildSettings().getRoute();
   }
 
   public void setRoute(String route) {
     sshSettingsBuilder.withRoute(route);
   }
 
-  public int getPort() {
-    return sshSettingsBuilder.build().getSshPort();
+  public @Min(1) @Max(65535) int getPort() {
+    return buildSettings().getSshPort();
   }
 
-  public void setPort(@Min(1) @Max(65535) int port) {
+  public void setPort(int port) {
     sshSettingsBuilder.withSshPort(port);
   }
 
   public String getLocalHost() {
-    return sshSettingsBuilder.build().getLocalHost();
+    return buildSettings().getLocalHost();
   }
 
   public void setLocalHost(String localHost) {
     sshSettingsBuilder.withLocalHost(localHost);
   }
 
-  public String getPrivateKeys() {
-    return joiner.join(sshSettingsBuilder.build().getPrivateKeys());
+  public @NotBlank String getPrivateKeys() {
+
+    return joiner.join(buildSettings().getPrivateKeys());
+
   }
 
   public void setPrivateKeys(String privateKeys) {
     sshSettingsBuilder.withPrivateKeys(privateKeys);
   }
 
-  public String getKnownHosts() {
-    return sshSettingsBuilder.build().getKnownHosts();
+  public @NotBlank String getKnownHosts() {
+    return buildSettings().getKnownHosts();
   }
 
   public void setKnownHosts(String knownHosts) {
     sshSettingsBuilder.withKnownHosts(knownHosts);
   }
 
-  public int getTimeout() {
-    return sshSettingsBuilder.build().getSessionTimeout();
+  public @Min(0) @Max(Integer.MAX_VALUE) int getTimeout() {
+    return buildSettings().getSessionTimeout();
   }
 
   public void setTimeout(int timeout) {
     sshSettingsBuilder.withSessionTimeout(timeout);
   }
 
-  public String getStrictHostKeyChecking() {
-    if (sshSettingsBuilder.build().isStrictHostKeyChecking()) {
+  public @Pattern(regexp = "^(?i:yes\\b|no\\b)") String getStrictHostKeyChecking() {
+    if (wrongStrictHostKeyChecking != null && strictHostKeyCheckingIsWrong) {
+      strictHostKeyCheckingIsWrong = false;
+      return wrongStrictHostKeyChecking;
+    }
+
+    if (buildSettings().isStrictHostKeyChecking()) {
       return "yes";
     } else {
       return "no";
@@ -92,7 +102,14 @@ public class SshSettingsFactory {
       sshSettingsBuilder.withStrictHostKeyChecking(true);
     } else if (strictHostKeyChecking.toLowerCase() == "no") {
       sshSettingsBuilder.withStrictHostKeyChecking(false);
+    } else {
+      wrongStrictHostKeyChecking = strictHostKeyChecking;
+      strictHostKeyCheckingIsWrong = true;
     }
+  }
+
+  private SshSettings buildSettings() {
+    return sshSettingsBuilder.buildWithoutCheck();
   }
 
 }

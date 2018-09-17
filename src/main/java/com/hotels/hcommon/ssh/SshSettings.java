@@ -89,6 +89,10 @@ public class SshSettings {
       checkArgument(sessionTimeout >= 0, "Invalid SSH session timeout: " + sessionTimeout);
       return new SshSettings(this);
     }
+
+    public SshSettings buildWithoutCheck() {
+      return new SshSettings(this);
+    }
   }
 
   public static Builder builder() {
@@ -97,7 +101,7 @@ public class SshSettings {
 
   private final int sshPort;
   private final String route;
-  private final List<String> privateKeys;
+  private List<String> privateKeys;
   private final String knownHosts;
   private final String localhost;
   private final int sessionTimeout;
@@ -106,11 +110,16 @@ public class SshSettings {
   protected SshSettings(Builder builder) {
     sshPort = builder.sshPort;
     route = builder.route;
-    privateKeys = Collections.unmodifiableList(Arrays.asList(builder.privateKeys.split(",")));
     knownHosts = builder.knownHosts;
     localhost = builder.localHost;
     sessionTimeout = builder.sessionTimeout;
     strictHostKeyChecking = builder.strictHostKeyChecking;
+
+    try {
+      privateKeys = Collections.unmodifiableList(Arrays.asList(builder.privateKeys.split(",")));
+    } catch (NullPointerException e) {
+      privateKeys = Collections.singletonList("");
+    }
   }
 
   public int getSshPort() {

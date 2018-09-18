@@ -24,6 +24,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,7 +56,14 @@ public class DelegatingSessionFactoryBuilderTest {
 
   @Test
   public void verifyNumberOfMethods() throws Exception {
-    assertThat(SessionFactoryBuilder.class.getDeclaredMethods().length, is(6));
+    Method[] declaredMethods = SessionFactoryBuilder.class.getDeclaredMethods();
+    int size = 0;
+    for (Method method : declaredMethods) {
+      if (!method.isSynthetic()) {
+        size++;
+      }
+    }
+    assertThat(size, is(6));
   }
 
   @Test

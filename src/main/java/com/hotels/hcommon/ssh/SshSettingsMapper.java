@@ -15,27 +15,27 @@
  */
 package com.hotels.hcommon.ssh;
 
+import java.util.Iterator;
+import java.util.List;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.google.common.base.Joiner;
-
 import com.hotels.hcommon.ssh.SshSettings.Builder;
 import com.hotels.hcommon.ssh.validation.constraint.TunnelRoute;
 
 public class SshSettingsMapper {
 
-  private final Joiner joiner = Joiner.on(',');
   private final Builder sshSettingsBuilder = SshSettings.builder();
   private String wrongStrictHostKeyChecking;
   private boolean strictHostKeyCheckingIsWrong = false;
 
   @SuppressWarnings("deprecation")
   public @NotBlank @TunnelRoute String getRoute() {
-    return builtSettings().getRoute();
+    return buildSettings().getRoute();
   }
 
   public void setRoute(String route) {
@@ -43,7 +43,7 @@ public class SshSettingsMapper {
   }
 
   public @Min(1) @Max(65535) int getPort() {
-    return builtSettings().getSshPort();
+    return buildSettings().getSshPort();
   }
 
   public void setPort(int port) {
@@ -51,7 +51,7 @@ public class SshSettingsMapper {
   }
 
   public String getLocalHost() {
-    return builtSettings().getLocalHost();
+    return buildSettings().getLocalHost();
   }
 
   public void setLocalHost(String localHost) {
@@ -59,9 +59,7 @@ public class SshSettingsMapper {
   }
 
   public @NotBlank String getPrivateKeys() {
-
-    return joiner.join(builtSettings().getPrivateKeys());
-
+    return join(buildSettings().getPrivateKeys());
   }
 
   public void setPrivateKeys(String privateKeys) {
@@ -69,7 +67,7 @@ public class SshSettingsMapper {
   }
 
   public @NotBlank String getKnownHosts() {
-    return builtSettings().getKnownHosts();
+    return buildSettings().getKnownHosts();
   }
 
   public void setKnownHosts(String knownHosts) {
@@ -77,7 +75,7 @@ public class SshSettingsMapper {
   }
 
   public @Min(0) @Max(Integer.MAX_VALUE) int getTimeout() {
-    return builtSettings().getSessionTimeout();
+    return buildSettings().getSessionTimeout();
   }
 
   public void setTimeout(int timeout) {
@@ -90,7 +88,7 @@ public class SshSettingsMapper {
       return wrongStrictHostKeyChecking;
     }
 
-    if (builtSettings().isStrictHostKeyChecking()) {
+    if (buildSettings().isStrictHostKeyChecking()) {
       return "yes";
     } else {
       return "no";
@@ -108,8 +106,24 @@ public class SshSettingsMapper {
     }
   }
 
-  private SshSettings builtSettings() {
+  private SshSettings buildSettings() {
     return sshSettingsBuilder.buildWithoutCheck();
+  }
+
+  // TODO: replace with String.join when project is moved to Java 8
+  // Taken from Guava Joiner method appendTo with a few changes
+  // we know that the list will have at least one element
+  private String join(List<String> list) {
+    StringBuilder joinedList = new StringBuilder();
+
+    Iterator<String> iterator = list.iterator();
+    joinedList.append(iterator.next().trim());
+    while (iterator.hasNext()) {
+      joinedList.append(',');
+      joinedList.append(iterator.next().trim());
+    }
+
+    return joinedList.toString();
   }
 
 }

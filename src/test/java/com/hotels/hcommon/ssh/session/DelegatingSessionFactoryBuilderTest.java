@@ -37,9 +37,6 @@ import com.jcraft.jsch.Proxy;
 import com.pastdev.jsch.SessionFactory;
 import com.pastdev.jsch.SessionFactory.SessionFactoryBuilder;
 
-import com.hotels.hcommon.ssh.session.DelegatingSessionFactory;
-import com.hotels.hcommon.ssh.session.DelegatingSessionFactoryBuilder;
-
 @RunWith(MockitoJUnitRunner.class)
 public class DelegatingSessionFactoryBuilderTest {
 
@@ -58,7 +55,7 @@ public class DelegatingSessionFactoryBuilderTest {
 
   @Test
   public void verifyNumberOfMethods() throws Exception {
-    assertThat(SessionFactoryBuilder.class.getDeclaredMethods().length, is(6));
+    assertThat(SessionFactoryBuilder.class.getDeclaredMethods().length, is(7));
   }
 
   @Test

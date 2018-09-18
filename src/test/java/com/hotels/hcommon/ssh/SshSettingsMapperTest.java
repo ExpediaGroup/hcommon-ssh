@@ -21,31 +21,46 @@ import static org.junit.Assert.assertThat;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
-import org.hibernate.validator.HibernateValidator;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 public class SshSettingsMapperTest {
 
-  private final LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
   private final SshSettingsMapper settings = new SshSettingsMapper();
+  private final String knownHosts = "knownHosts";
+  private final String privateKey = "privateKey";
+  private final String route = "hostA -> hostB";
+  private final int timeout = 123;
+
+  private static Validator validator;
 
   @Before
   public void before() {
-    validator.setProviderClass(HibernateValidator.class);
-    validator.afterPropertiesSet();
-    settings.setKnownHosts("knownHosts");
-    settings.setPrivateKeys("privateKey");
-    settings.setRoute("hostA -> hostB");
-    settings.setTimeout(123);
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    validator = factory.getValidator();
+
+    settings.setKnownHosts(knownHosts);
+    settings.setPrivateKeys(privateKey);
+    settings.setRoute(route);
+    settings.setTimeout(timeout);
   }
 
   @Test
   public void typical() {
     Set<ConstraintViolation<SshSettingsMapper>> violations = validator.validate(settings);
     assertThat(violations.size(), is(0));
+  }
+
+  @Test
+  public void parametersAreAssignedCorrectly() {
+    assertThat(settings.getKnownHosts(), is(knownHosts));
+    assertThat(settings.getPrivateKeys(), is(privateKey));
+    assertThat(settings.getRoute(), is(route));
+    assertThat(settings.getTimeout(), is(timeout));
   }
 
   @Test
@@ -134,6 +149,18 @@ public class SshSettingsMapperTest {
   }
 
   @Test
+  public void multiplePrivateKeys() {
+    settings.setPrivateKeys("privatekey1,privatekey2");
+    assertThat(settings.getPrivateKeys(), is("privatekey1,privatekey2"));
+  }
+
+  @Test
+  public void multiplePrivateKeysWithSpace() {
+    settings.setPrivateKeys("privatekey1, privatekey2");
+    assertThat(settings.getPrivateKeys(), is("privatekey1,privatekey2"));
+  }
+
+  @Test
   public void negativeTimeout() {
     settings.setTimeout(-1);
     Set<ConstraintViolation<SshSettingsMapper>> violations = validator.validate(settings);
@@ -173,5 +200,14 @@ public class SshSettingsMapperTest {
     assertThat(settings.getStrictHostKeyChecking(), is("yes"));
     Set<ConstraintViolation<SshSettingsMapper>> violations = validator.validate(settings);
     assertThat(violations.size(), is(0));
+  }
+
+  @Test
+  public void getLocalHost() {
+    String localHost = "localHost";
+    settings.setLocalHost(localHost);
+    Set<ConstraintViolation<SshSettingsMapper>> violations = validator.validate(settings);
+    assertThat(violations.size(), is(0));
+    assertThat(settings.getLocalHost(), is(localHost));
   }
 }

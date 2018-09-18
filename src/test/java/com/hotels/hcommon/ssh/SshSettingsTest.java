@@ -21,6 +21,7 @@ import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -205,6 +206,12 @@ public class SshSettingsTest {
         .withLocalHost(localHost)
         .build();
     assertThat(sshSettings.getLocalHost(), is(localHost));
+  }
+
+  @Test
+  public void nullPrivateKeys() {
+    SshSettings sshSettings = SshSettings.builder().withRoute("h1 -> h2").withPrivateKeys(null).buildWithoutCheck();
+    assertThat(sshSettings.getPrivateKeys(), is(Collections.singletonList("")));
   }
 
 }

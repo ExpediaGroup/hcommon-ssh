@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import com.hotels.hcommon.ssh.validation.constraint.TunnelRoute;
 import com.hotels.hcommon.ssh.validation.validator.TunnelRouteValidator;
@@ -56,7 +57,7 @@ public class SshSettings {
       return this;
     }
 
-    public Builder withPrivateKeys(String privateKeys) {
+    public Builder withPrivateKeys(@NotNull String privateKeys) {
       this.privateKeys = privateKeys;
       return this;
     }
@@ -115,10 +116,10 @@ public class SshSettings {
     sessionTimeout = builder.sessionTimeout;
     strictHostKeyChecking = builder.strictHostKeyChecking;
 
-    try {
-      privateKeys = Collections.unmodifiableList(Arrays.asList(builder.privateKeys.split(",")));
-    } catch (NullPointerException e) {
+    if (builder.privateKeys == null) {
       privateKeys = Collections.singletonList("");
+    } else {
+      privateKeys = Collections.unmodifiableList(Arrays.asList(builder.privateKeys.split(",")));
     }
   }
 

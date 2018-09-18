@@ -24,6 +24,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,9 +37,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.jcraft.jsch.Proxy;
 import com.pastdev.jsch.SessionFactory;
 import com.pastdev.jsch.SessionFactory.SessionFactoryBuilder;
-
-import com.hotels.hcommon.ssh.session.DelegatingSessionFactory;
-import com.hotels.hcommon.ssh.session.DelegatingSessionFactoryBuilder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DelegatingSessionFactoryBuilderTest {
@@ -58,7 +56,14 @@ public class DelegatingSessionFactoryBuilderTest {
 
   @Test
   public void verifyNumberOfMethods() throws Exception {
-    assertThat(SessionFactoryBuilder.class.getDeclaredMethods().length, is(6));
+    Method[] declaredMethods = SessionFactoryBuilder.class.getDeclaredMethods();
+    int size = 0;
+    for (Method method : declaredMethods) {
+      if (!method.isSynthetic()) {
+        size++;
+      }
+    }
+    assertThat(size, is(6));
   }
 
   @Test

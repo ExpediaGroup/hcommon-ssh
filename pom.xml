@@ -29,6 +29,8 @@
     <hamcrest.version>1.3</hamcrest.version>
     <maven-shade-plugin.version>3.0.0</maven-shade-plugin.version>
     <relocation-prefix>com.hotels.hcommon.ssh</relocation-prefix>
+    <hivernate-validator.version>5.4.2.Final</hivernate-validator.version>
+    <javax-el.version>3.0.1-b08</javax-el.version>
   </properties>
 
   <dependencies>
@@ -51,6 +53,21 @@
       </exclusions>
     </dependency>
 
+
+    <!-- Hibernate for validation annotations -->
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>${hivernate-validator.version}</version>
+    </dependency> 
+    
+    <dependency>
+      <groupId>org.glassfish</groupId>
+      <artifactId>javax.el</artifactId>
+      <version>${javax-el.version}</version>
+    </dependency>
+    
+    
     <dependency>
       <groupId>javax.validation</groupId>
       <artifactId>validation-api</artifactId>

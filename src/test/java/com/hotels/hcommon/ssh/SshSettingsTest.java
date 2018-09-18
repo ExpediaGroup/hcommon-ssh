@@ -21,6 +21,7 @@ import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -43,6 +44,7 @@ public class SshSettingsTest {
   private File knownHosts;
   private File identityKey1;
   private File identityKey2;
+  private String privateKeys;
 
   @Before
   public void init() throws Exception {
@@ -58,6 +60,8 @@ public class SshSettingsTest {
     identityKey2 = tmpFolder.newFile(IDENTITY_KEY_2);
     keyPair = KeyPair.genKeyPair(jSch, KeyPair.RSA);
     keyPair.writePrivateKey(identityKey2.getAbsolutePath());
+
+    privateKeys = identityKey1.getAbsolutePath() + "," + identityKey2.getAbsolutePath();
   }
 
   @Test
@@ -66,7 +70,7 @@ public class SshSettingsTest {
         .builder()
         .withRoute("a -> b")
         .withKnownHosts(knownHosts.getAbsolutePath())
-        .withPrivateKeys(identityKey1.getAbsolutePath() + "," + identityKey2.getAbsolutePath())
+        .withPrivateKeys(privateKeys)
         .build();
     assertThat(sshSettings.getSshPort(), is(SshSettings.DEFAULT_SSH_PORT));
     assertThat(sshSettings.getSessionTimeout(), is(SshSettings.DEFAULT_SESSION_TIMEOUT));
@@ -85,7 +89,7 @@ public class SshSettingsTest {
         .withSessionTimeout(1050)
         .withRoute("h1 -> h2")
         .withKnownHosts(knownHosts.getAbsolutePath())
-        .withPrivateKeys(identityKey1.getAbsolutePath() + "," + identityKey2.getAbsolutePath())
+        .withPrivateKeys(privateKeys)
         .withStrictHostKeyChecking(false)
         .build();
     assertThat(sshSettings.getSshPort(), is(23));
@@ -97,6 +101,7 @@ public class SshSettingsTest {
         is(Arrays.asList(identityKey1.getAbsolutePath(), identityKey2.getAbsolutePath())));
   }
 
+  @Test
   public void invalidSshPort() {
     expectedException.expect(IllegalArgumentException.class);
     expectedException.expectMessage("Invalid SSH port number: 0");
@@ -105,7 +110,7 @@ public class SshSettingsTest {
         .withSshPort(0)
         .withRoute("h1 -> h2")
         .withKnownHosts(knownHosts.getAbsolutePath())
-        .withPrivateKeys(identityKey1.getAbsolutePath() + "," + identityKey2.getAbsolutePath())
+        .withPrivateKeys(privateKeys)
         .build();
   }
 
@@ -118,7 +123,7 @@ public class SshSettingsTest {
         .withSessionTimeout(-1)
         .withRoute("h1 -> h2")
         .withKnownHosts(knownHosts.getAbsolutePath())
-        .withPrivateKeys(identityKey1.getAbsolutePath() + "," + identityKey2.getAbsolutePath())
+        .withPrivateKeys(privateKeys)
         .build();
   }
 
@@ -128,7 +133,7 @@ public class SshSettingsTest {
         .builder()
         .withRoute(null)
         .withKnownHosts(knownHosts.getAbsolutePath())
-        .withPrivateKeys(identityKey1.getAbsolutePath() + "," + identityKey2.getAbsolutePath())
+        .withPrivateKeys(privateKeys)
         .build();
     assertThat(sshSettings.getRoute(), is(nullValue()));
   }
@@ -139,7 +144,7 @@ public class SshSettingsTest {
         .builder()
         .withRoute(" ")
         .withKnownHosts(knownHosts.getAbsolutePath())
-        .withPrivateKeys(identityKey1.getAbsolutePath() + "," + identityKey2.getAbsolutePath())
+        .withPrivateKeys(privateKeys)
         .build();
     assertThat(sshSettings.getRoute(), is(" "));
   }
@@ -152,7 +157,7 @@ public class SshSettingsTest {
         .builder()
         .withRoute("@ -> 1")
         .withKnownHosts(knownHosts.getAbsolutePath())
-        .withPrivateKeys(identityKey1.getAbsolutePath() + "," + identityKey2.getAbsolutePath())
+        .withPrivateKeys(privateKeys)
         .build();
   }
 
@@ -162,7 +167,7 @@ public class SshSettingsTest {
         .builder()
         .withRoute("h1 -> h2")
         .withKnownHosts(null)
-        .withPrivateKeys(identityKey1.getAbsolutePath() + "," + identityKey2.getAbsolutePath())
+        .withPrivateKeys(privateKeys)
         .build();
     assertThat(sshSettings.getKnownHosts(), is(nullValue()));
   }
@@ -173,7 +178,7 @@ public class SshSettingsTest {
         .builder()
         .withRoute("h1 -> h2")
         .withKnownHosts(" ")
-        .withPrivateKeys(identityKey1.getAbsolutePath() + "," + identityKey2.getAbsolutePath())
+        .withPrivateKeys(privateKeys)
         .build();
     assertThat(sshSettings.getKnownHosts(), is(" "));
   }
@@ -188,6 +193,25 @@ public class SshSettingsTest {
         .withKnownHosts(knownHosts.getAbsolutePath())
         .withPrivateKeys(" ")
         .build();
+  }
+
+  @Test
+  public void getLocalHost() {
+    String localHost = "localHost";
+    SshSettings sshSettings = SshSettings
+        .builder()
+        .withRoute("h1 -> h2")
+        .withKnownHosts(null)
+        .withPrivateKeys(privateKeys)
+        .withLocalHost(localHost)
+        .build();
+    assertThat(sshSettings.getLocalHost(), is(localHost));
+  }
+
+  @Test
+  public void nullPrivateKeys() {
+    SshSettings sshSettings = SshSettings.builder().withRoute("h1 -> h2").withPrivateKeys(null).buildWithoutCheck();
+    assertThat(sshSettings.getPrivateKeys(), is(Collections.singletonList("")));
   }
 
 }

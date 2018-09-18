@@ -33,12 +33,15 @@ public class SshSettings {
   public static final int DEFAULT_SSH_PORT = 22;
   public static final int DEFAULT_SESSION_TIMEOUT = 0; // never time out
   public static final boolean DEFAULT_STRICT_HOST_KEY_CHECKING = true;
+  private static final String DEFAULT_LOCALHOST = "localhost";
 
   public static class Builder {
+
     private int sshPort = DEFAULT_SSH_PORT;
     private String route;
     private String privateKeys;
     private String knownHosts;
+    private String localHost = DEFAULT_LOCALHOST;
     private int sessionTimeout = DEFAULT_SESSION_TIMEOUT;
     private boolean strictHostKeyChecking = DEFAULT_STRICT_HOST_KEY_CHECKING;
 
@@ -64,6 +67,11 @@ public class SshSettings {
       return this;
     }
 
+    public Builder withLocalHost(String localHost) {
+      this.localHost = localHost;
+      return this;
+    }
+
     public Builder withSessionTimeout(@Min(0) int sessionTimeout) {
       this.sessionTimeout = sessionTimeout;
       return this;
@@ -82,6 +90,10 @@ public class SshSettings {
       checkArgument(sessionTimeout >= 0, "Invalid SSH session timeout: " + sessionTimeout);
       return new SshSettings(this);
     }
+
+    public SshSettings buildWithoutCheck() {
+      return new SshSettings(this);
+    }
   }
 
   public static Builder builder() {
@@ -90,18 +102,25 @@ public class SshSettings {
 
   private final int sshPort;
   private final String route;
-  private final List<String> privateKeys;
+  private List<String> privateKeys;
   private final String knownHosts;
+  private final String localhost;
   private final int sessionTimeout;
   private final boolean strictHostKeyChecking;
 
   private SshSettings(Builder builder) {
     sshPort = builder.sshPort;
     route = builder.route;
-    privateKeys = Collections.unmodifiableList(Arrays.asList(builder.privateKeys.split(",")));
     knownHosts = builder.knownHosts;
+    localhost = builder.localHost;
     sessionTimeout = builder.sessionTimeout;
     strictHostKeyChecking = builder.strictHostKeyChecking;
+
+    if (builder.privateKeys == null) {
+      privateKeys = Collections.singletonList("");
+    } else {
+      privateKeys = Collections.unmodifiableList(Arrays.asList(builder.privateKeys.split(",")));
+    }
   }
 
   public int getSshPort() {
@@ -118,6 +137,10 @@ public class SshSettings {
 
   public String getKnownHosts() {
     return knownHosts;
+  }
+
+  public String getLocalHost() {
+    return localhost;
   }
 
   public int getSessionTimeout() {

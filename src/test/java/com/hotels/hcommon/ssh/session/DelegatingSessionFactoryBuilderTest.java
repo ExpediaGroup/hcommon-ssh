@@ -55,7 +55,7 @@ public class DelegatingSessionFactoryBuilderTest {
 
   @Test
   public void verifyNumberOfMethods() throws Exception {
-    assertThat(SessionFactoryBuilder.class.getDeclaredMethods().length, is(7));
+    assertThat(SessionFactoryBuilder.class.getDeclaredMethods().length, is(6));
   }
 
   @Test

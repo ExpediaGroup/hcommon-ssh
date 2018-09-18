@@ -45,7 +45,7 @@ public class SshSettings {
     private int sessionTimeout = DEFAULT_SESSION_TIMEOUT;
     private boolean strictHostKeyChecking = DEFAULT_STRICT_HOST_KEY_CHECKING;
 
-    public Builder() {}
+    private Builder() {}
 
     public Builder withSshPort(@Min(1) @Max(65535) int sshPort) {
       this.sshPort = sshPort;
@@ -108,7 +108,7 @@ public class SshSettings {
   private final int sessionTimeout;
   private final boolean strictHostKeyChecking;
 
-  protected SshSettings(Builder builder) {
+  private SshSettings(Builder builder) {
     sshPort = builder.sshPort;
     route = builder.route;
     knownHosts = builder.knownHosts;

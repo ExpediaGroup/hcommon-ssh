@@ -15,6 +15,8 @@
  */
 package com.hotels.hcommon.ssh.validation;
 
+import javax.validation.ValidationException;
+
 public final class Preconditions {
 
   private Preconditions() {}
@@ -23,6 +25,20 @@ public final class Preconditions {
     if (!condition) {
       throw new IllegalArgumentException(message);
     }
+  }
+
+  public static <T> T checkNotNull(T object, String message) {
+    if (object == null) {
+      throw new ValidationException(message);
+    }
+    return object;
+  }
+
+  public static boolean checkIsTrue(boolean condition, String message) {
+    if (!condition) {
+      throw new ValidationException(message);
+    }
+    return condition;
   }
 
 }

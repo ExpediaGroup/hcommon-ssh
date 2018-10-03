@@ -30,6 +30,7 @@ import com.hotels.hcommon.ssh.validation.validator.TunnelRouteValidator;
 
 public class SshSettings {
 
+  public static final String DEFAULT_LOCALHOST = "localhost";
   public static final int DEFAULT_SSH_PORT = 22;
   public static final int DEFAULT_SESSION_TIMEOUT = 0; // never time out
   public static final boolean DEFAULT_STRICT_HOST_KEY_CHECKING = true;
@@ -39,6 +40,7 @@ public class SshSettings {
     private String route;
     private String privateKeys;
     private String knownHosts;
+    private String localhost = DEFAULT_LOCALHOST;
     private int sessionTimeout = DEFAULT_SESSION_TIMEOUT;
     private boolean strictHostKeyChecking = DEFAULT_STRICT_HOST_KEY_CHECKING;
 
@@ -61,6 +63,11 @@ public class SshSettings {
 
     public Builder withKnownHosts(String knownHosts) {
       this.knownHosts = knownHosts;
+      return this;
+    }
+
+    public Builder withLocalhost(String localhost) {
+      this.localhost = localhost;
       return this;
     }
 
@@ -92,6 +99,7 @@ public class SshSettings {
   private final String route;
   private final List<String> privateKeys;
   private final String knownHosts;
+  private final String localhost;
   private final int sessionTimeout;
   private final boolean strictHostKeyChecking;
 
@@ -100,6 +108,7 @@ public class SshSettings {
     route = builder.route;
     privateKeys = Collections.unmodifiableList(Arrays.asList(builder.privateKeys.split(",")));
     knownHosts = builder.knownHosts;
+    localhost = builder.localhost;
     sessionTimeout = builder.sessionTimeout;
     strictHostKeyChecking = builder.strictHostKeyChecking;
   }
@@ -118,6 +127,10 @@ public class SshSettings {
 
   public String getKnownHosts() {
     return knownHosts;
+  }
+
+  public String getLocalhost() {
+    return localhost;
   }
 
   public int getSessionTimeout() {

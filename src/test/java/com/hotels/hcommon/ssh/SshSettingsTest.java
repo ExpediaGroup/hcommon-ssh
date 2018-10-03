@@ -190,4 +190,17 @@ public class SshSettingsTest {
         .build();
   }
 
+  @Test
+  public void getLocalgost() {
+    String localhost = "mylocalhost";
+    SshSettings sshSettings = SshSettings
+        .builder()
+        .withRoute("h1 -> h2")
+        .withKnownHosts(" ")
+        .withPrivateKeys(identityKey1.getAbsolutePath() + "," + identityKey2.getAbsolutePath())
+        .withLocalhost(localhost)
+        .build();
+    assertThat(sshSettings.getLocalhost(), is(localhost));
+  }
+
 }

@@ -191,7 +191,7 @@ public class SshSettingsTest {
   }
 
   @Test
-  public void getLocalgost() {
+  public void getLocalhost() {
     String localhost = "mylocalhost";
     SshSettings sshSettings = SshSettings
         .builder()

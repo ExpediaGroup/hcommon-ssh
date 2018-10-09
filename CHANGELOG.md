@@ -1,6 +1,6 @@
 ## TBD
 ### Added
-* SshSettings has a new parameter can be assigned: localhost.
+* SshSettings has a new parameter that can be assigned: localhost.
 * Preconditions can check if an object is null or true with `checkNotNull` and `checkIsTrue`, respectively.
 
 ## [1.0.1] - 2018-05-21

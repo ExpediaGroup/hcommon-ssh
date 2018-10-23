@@ -15,9 +15,12 @@
  */
 package com.hotels.hcommon.ssh.validation;
 
-import org.junit.Test;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
-import com.hotels.hcommon.ssh.validation.Preconditions;
+import javax.validation.ValidationException;
+
+import org.junit.Test;
 
 public class PreconditionsTest {
 
@@ -33,4 +36,24 @@ public class PreconditionsTest {
     Preconditions.checkArgument(argument != null, "message");
   }
 
+  @Test
+  public void checkNotNull() {
+    Object obj = new Object();
+    assertThat(Preconditions.checkNotNull(obj, "message"), is(obj));
+  }
+
+  @Test(expected = ValidationException.class)
+  public void checkNotNullFails() {
+    Preconditions.checkNotNull(null, "message");
+  }
+
+  @Test
+  public void checkIsTrue() {
+    assertThat(Preconditions.checkIsTrue(true, "message"), is(true));
+  }
+
+  @Test(expected = ValidationException.class)
+  public void checkIsTrueFails() {
+    Preconditions.checkIsTrue(false, "message");
+  }
 }

@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>hcommon-ssh</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.0.2</version>
   <name>SSH Tunneling Library</name>
   <inceptionYear>2018</inceptionYear>
 

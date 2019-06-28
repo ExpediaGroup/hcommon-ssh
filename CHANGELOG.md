@@ -1,3 +1,7 @@
+## [TBD] - TBD
+### Changed
+* Upgraded `hotels-oss-parent` to 4.1.0 (was 2.0.6).
+
 ## [1.0.2] - 2018-10-23
 ### Added
 * SshSettings has a new parameter that can be assigned: localhost.

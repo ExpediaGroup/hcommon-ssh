@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018 Expedia Inc.
+ * Copyright (C) 2018-2019 Expedia, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,7 +60,14 @@ public class DelegatingSessionFactoryBuilderTest {
 
   @Test
   public void verifyNumberOfMethods() throws Exception {
-    assertThat(SessionFactoryBuilder.class.getDeclaredMethods().length, is(6));
+    Method[] declaredMethods = SessionFactoryBuilder.class.getDeclaredMethods();
+    int publicMethodCount = 0;
+    for (Method method : declaredMethods) {
+      if(Modifier.isPublic(method.getModifiers())) {
+        publicMethodCount++;
+      }
+    }
+    assertThat(publicMethodCount, is(6));
   }
 
   @Test

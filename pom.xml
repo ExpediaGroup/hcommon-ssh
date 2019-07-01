@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.hotels</groupId>
     <artifactId>hotels-oss-parent</artifactId>
-    <version>2.0.6</version>
+    <version>4.1.0</version>
   </parent>
 
   <artifactId>hcommon-ssh</artifactId>
@@ -20,6 +20,7 @@
   </scm>
 
   <properties>
+    <jdk.version>1.7</jdk.version>
     <jsch.version>0.1.54</jsch.version>
     <jsch-extension.version>0.1.6</jsch-extension.version>
     <validation-api.version>1.1.0.Final</validation-api.version>

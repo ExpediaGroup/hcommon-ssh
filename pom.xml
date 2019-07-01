@@ -28,6 +28,7 @@
     <junit.version>4.12</junit.version>
     <mockito.version>1.10.19</mockito.version>
     <hamcrest.version>1.3</hamcrest.version>
+    <maven.checkstyle.plugin.version>3.0.0</maven.checkstyle.plugin.version>
     <maven-shade-plugin.version>3.0.0</maven-shade-plugin.version>
     <relocation-prefix>com.hotels.hcommon.ssh</relocation-prefix>
   </properties>

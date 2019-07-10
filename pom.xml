@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.hotels</groupId>
     <artifactId>hotels-oss-parent</artifactId>
-    <version>4.2.0-SNAPSHOT</version>
+    <version>4.1.0</version>
   </parent>
 
   <artifactId>hcommon-ssh</artifactId>
@@ -29,6 +29,7 @@
     <mockito.version>1.10.19</mockito.version>
     <hamcrest.version>1.3</hamcrest.version>
     <maven.checkstyle.plugin.version>3.0.0</maven.checkstyle.plugin.version>
+    <!--spotbugs.skip>true</spotbugs.skip-->
     <maven-shade-plugin.version>3.0.0</maven-shade-plugin.version>
     <relocation-prefix>com.hotels.hcommon.ssh</relocation-prefix>
   </properties>
@@ -128,5 +129,22 @@
       </plugin>
     </plugins>
   </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>3.1.12</version>
+        <configuration>
+          <encoding>${project.build.sourceEncoding}</encoding>
+          <xmlOutput>true</xmlOutput>
+          <effort>Max</effort>
+          <threshold>Low</threshold>
+          <excludeFilterFile>file://${project.build.directory}/plugin-config/findbugs/hotels-findbugs-exclude.xml</excludeFilterFile>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
 
 </project>

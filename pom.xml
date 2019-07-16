@@ -141,7 +141,7 @@
 
   <pluginRepositories>
     <pluginRepository>
-        <id>hcomdata-maven-release-local</id>
+        <id>hcomdata-maven-snapshot-local</id>
         <name>HCom Data Internal Releases</name>
         <url>${maven.distribution.repo.release.url}</url>
     </pluginRepository>

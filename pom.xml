@@ -31,6 +31,16 @@
     <maven.checkstyle.plugin.version>3.0.0</maven.checkstyle.plugin.version>
     <maven-shade-plugin.version>3.0.0</maven-shade-plugin.version>
     <relocation-prefix>com.hotels.hcommon.ssh</relocation-prefix>
+
+    <!-- For testing-->
+    <artifactory.base>artylab.expedia.biz</artifactory.base>
+    <artifactory.base.url>https://${artifactory.base}</artifactory.base.url>
+    <artifactory.maven.release.repository.id>hcomdata-maven-release-local</artifactory.maven.release.repository.id>
+    <artifactory.maven.snapshot.repository.id>hcomdata-maven-snapshot-local</artifactory.maven.snapshot.repository.id>
+    <maven.distribution.repo.release.url>${artifactory.base.url}/${artifactory.maven.release.repository.id}</maven.distribution.repo.release.url>
+    <maven.distribution.repo.snapshot.url>${artifactory.base.url}/${artifactory.maven.snapshot.repository.id}</maven.distribution.repo.snapshot.url>
+
+
   </properties>
 
   <dependencies>
@@ -128,6 +138,14 @@
       </plugin>
     </plugins>
   </build>
+
+  <pluginRepositories>
+    <pluginRepository>
+        <id>hcomdata-maven-release-local</id>
+        <name>HCom Data Internal Releases</name>
+        <url>${maven.distribution.repo.release.url}</url>
+    </pluginRepository>
+  </pluginRepositories>
 
   <reporting>
     <plugins>

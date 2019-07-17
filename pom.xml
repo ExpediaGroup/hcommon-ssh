@@ -159,7 +159,7 @@
           <effort>Max</effort>
           <threshold>Low</threshold>
           <excludeFilterFile>file://${project.build.directory}/plugin-config/findbugs/hotels-findbugs-exclude.xml</excludeFilterFile>
-          <xmlOutputFilename>findbugsXml.xml</xmlOutputFilename>
+          <xmlOutputFilename>testbugsXml.xml</xmlOutputFilename>
         </configuration>
       </plugin>
     </plugins>

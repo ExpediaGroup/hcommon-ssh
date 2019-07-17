@@ -135,6 +135,14 @@
         <groupId>com.hotels.bdp</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <version>3.1.14-SNAPSHOT-HOTELS</version>
+        <configuration>
+          <encoding>${project.build.sourceEncoding}</encoding>
+          <xmlOutput>true</xmlOutput>
+          <effort>Max</effort>
+          <threshold>Low</threshold>
+          <excludeFilterFile>file://${project.build.directory}/plugin-config/findbugs/hotels-findbugs-exclude.xml</excludeFilterFile>
+          <xmlOutputFilename>findbugsXml.xml</xmlOutputFilename>
+        </configuration>
       </plugin>
     </plugins>
   </build>

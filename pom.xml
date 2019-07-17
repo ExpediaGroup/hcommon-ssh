@@ -134,7 +134,7 @@
       <plugin>
         <groupId>com.hotels.bdp</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>3.1.13-SNAPSHOT</version>
+        <version>3.1.14-SNAPSHOT-HOTELS</version>
       </plugin>
     </plugins>
   </build>
@@ -142,7 +142,7 @@
   <pluginRepositories>
     <pluginRepository>
         <id>hcomdata-maven-snapshot-local</id>
-        <name>HCom Data Internal Releases</name>
+        <name>HCom Data Internal Snapshots</name>
         <url>${maven.distribution.repo.snapshot.url}</url>
     </pluginRepository>
   </pluginRepositories>
@@ -152,7 +152,7 @@
       <plugin>
         <groupId>com.hotels.bdp</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>3.1.13-SNAPSHOT</version>
+        <version>3.1.14-SNAPSHOT-HOTELS</version>
         <configuration>
           <encoding>${project.build.sourceEncoding}</encoding>
           <xmlOutput>true</xmlOutput>

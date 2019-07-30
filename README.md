@@ -6,7 +6,7 @@ This library provides common functionality which allows network-connected compon
 
 You can obtain this library from Maven Central:
 
-[![Maven Central TGZ](https://maven-badges.herokuapp.com/maven-central/com.hotels/hcommon-ssh/badge.svg?subject=com.hotels:hcommon-ssh.jar)](https://maven-badges.herokuapp.com/maven-central/com.hotels/hcommon-ssh) [![Build Status](https://travis-ci.org/HotelsDotCom/hcommon-ssh.svg?branch=master)](https://travis-ci.org/HotelsDotCom/hcommon-ssh) [![Coverage Status](https://coveralls.io/repos/github/HotelsDotCom/hcommon-ssh/badge.svg?branch=master)](https://coveralls.io/github/HotelsDotCom/hcommon-ssh?branch=master) ![GitHub license](https://img.shields.io/github/license/HotelsDotCom/hcommon-ssh.svg)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.hotels/hcommon-ssh/badge.svg?subject=com.hotels:hcommon-ssh.jar)](https://maven-badges.herokuapp.com/maven-central/com.hotels/hcommon-ssh) [![Build Status](https://travis-ci.org/HotelsDotCom/hcommon-ssh.svg?branch=master)](https://travis-ci.org/HotelsDotCom/hcommon-ssh) [![Coverage Status](https://coveralls.io/repos/github/HotelsDotCom/hcommon-ssh/badge.svg?branch=master)](https://coveralls.io/github/HotelsDotCom/hcommon-ssh?branch=master) ![GitHub license](https://img.shields.io/github/license/HotelsDotCom/hcommon-ssh.svg)
 
 ## Overview
 

@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.hotels</groupId>
     <artifactId>hotels-oss-parent</artifactId>
-    <version>4.1.0</version>
+    <version>4.2.0</version>
   </parent>
 
   <artifactId>hcommon-ssh</artifactId>
@@ -31,6 +31,7 @@
     <maven.checkstyle.plugin.version>3.0.0</maven.checkstyle.plugin.version>
     <maven-shade-plugin.version>3.0.0</maven-shade-plugin.version>
     <relocation-prefix>com.hotels.hcommon.ssh</relocation-prefix>
+
   </properties>
 
   <dependencies>
@@ -119,6 +120,13 @@
               <shadedPattern>${relocation-prefix}.com.pastdev</shadedPattern>
             </relocation>
           </relocations>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <configuration>
+          <spotbugsXmlOutputFilename>findbugsXml.xml</spotbugsXmlOutputFilename>
         </configuration>
       </plugin>
     </plugins>

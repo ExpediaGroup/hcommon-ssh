@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.hotels</groupId>
     <artifactId>hotels-oss-parent</artifactId>
-    <version>4.1.0</version>
+    <version>4.2.0</version>
   </parent>
 
   <artifactId>hcommon-ssh</artifactId>
@@ -134,13 +134,7 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>3.1.12.2</version>
         <configuration>
-          <encoding>${project.build.sourceEncoding}</encoding>
-          <xmlOutput>true</xmlOutput>
-          <effort>Max</effort>
-          <threshold>Low</threshold>
-          <excludeFilterFile>file://${project.build.directory}/plugin-config/findbugs/hotels-findbugs-exclude.xml</excludeFilterFile>
           <spotbugsXmlOutputFilename>findbugsXml.xml</spotbugsXmlOutputFilename>
         </configuration>
       </plugin>

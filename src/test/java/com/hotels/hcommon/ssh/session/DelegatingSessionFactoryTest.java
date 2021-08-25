@@ -35,8 +35,6 @@ import com.jcraft.jsch.Session;
 import com.pastdev.jsch.SessionFactory;
 import com.pastdev.jsch.SessionFactory.SessionFactoryBuilder;
 
-import com.hotels.hcommon.ssh.session.DelegatingSessionFactory;
-import com.hotels.hcommon.ssh.session.DelegatingSessionFactoryBuilder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DelegatingSessionFactoryTest {

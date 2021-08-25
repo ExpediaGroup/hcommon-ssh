@@ -27,7 +27,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hotels.hcommon.ssh.validation.constraint.TunnelRoute;
-import com.hotels.hcommon.ssh.validation.validator.TunnelRouteValidator;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TunnelRouteValidatorTest {

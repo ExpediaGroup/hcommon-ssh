@@ -32,7 +32,6 @@ import com.pastdev.jsch.tunnel.TunnelConnectionManager;
 
 import com.hotels.hcommon.ssh.SshSettings;
 import com.hotels.hcommon.ssh.session.SessionFactorySupplier;
-import com.hotels.hcommon.ssh.tunnel.DefaultTunnelConnectionManagerFactory;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultTunnelConnectionManagerFactoryTest {

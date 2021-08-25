@@ -2,25 +2,26 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.hotels</groupId>
-    <artifactId>hotels-oss-parent</artifactId>
-    <version>4.2.0</version>
+    <groupId>com.expediagroup</groupId>
+    <artifactId>eg-oss-parent</artifactId>
+    <version>2.4.0</version>
   </parent>
 
+  <groupId>com.hotels</groupId>
   <artifactId>hcommon-ssh</artifactId>
   <version>1.0.3-SNAPSHOT</version>
   <name>SSH Tunneling Library</name>
   <inceptionYear>2018</inceptionYear>
 
   <scm>
-    <connection>scm:git:https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/HotelsDotCom/hcommon-ssh.git</connection>
-    <developerConnection>scm:git:https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/HotelsDotCom/hcommon-ssh.git</developerConnection>
-    <url>https://github.com/HotelsDotCom/hcommon-ssh</url>
+    <connection>scm:git:https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/ExpediaGroup/hcommon-ssh.git</connection>
+    <developerConnection>scm:git:https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/ExpediaGroup/hcommon-ssh.git</developerConnection>
+    <url>https://github.com/ExpediaGroup/hcommon-ssh</url>
     <tag>HEAD</tag>
   </scm>
 
   <properties>
-    <jdk.version>1.7</jdk.version>
+    <jdk.version>1.8</jdk.version>
     <jsch.version>0.1.54</jsch.version>
     <jsch-extension.version>0.1.6</jsch-extension.version>
     <validation-api.version>1.1.0.Final</validation-api.version>
